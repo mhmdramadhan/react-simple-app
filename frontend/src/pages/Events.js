@@ -1,38 +1,32 @@
-import EventsList from '../components/EventsList';
+import { json, useLoaderData } from "react-router-dom";
 
-const DATA = [
-  {
-    id: 'p1',
-    title: 'Event 1',
-    image: 'https://placehold.co/600x400',
-    date: '20 Januari 2023',
-  },
-  {
-    id: 'p2',
-    title: 'Event 2',
-    image: 'https://placehold.co/600x400',
-    date: '20 Januari 2023',
-  },
-  {
-    id: 'p3',
-    title: 'Event 3',
-    image: 'https://placehold.co/600x400',
-    date: '20 Januari 2023',
-  },
-  {
-    id: 'p4',
-    title: 'Event 4',
-    image: 'https://placehold.co/600x400',
-    date: '20 Januari 2023',
-  },
-];
+import EventsList from "../components/EventsList";
 
 function EventsPage() {
+  const fetchData = useLoaderData();
+
   return (
     <>
-      <EventsList events={DATA} />
+      <EventsList events={fetchData} />
     </>
   );
 }
 
 export default EventsPage;
+
+export async function loader() {
+  const response = await fetch("http://localhost:8081/events");
+
+  if (!response.ok) {
+    // return { message: 'Could not fetch data events.' }
+    throw json(
+      { message: "Could not fetch data events." },
+      {
+        status: 500,
+      }
+    );
+  } else {
+    const resData = await response.json();
+    return resData.events;
+  }
+}
