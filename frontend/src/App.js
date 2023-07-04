@@ -19,20 +19,21 @@
 //    Every list item should include a link to the respective EventDetailPage
 // 7. Output the ID of the selected event on the EventDetailPage
 // BONUS: Add another (nested) layout route that adds the <EventNavigation> component above all /events... page components
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import RouteLayout from './pages/Root';
-import HomePage from './pages/Home';
-import EventsPage, { loader as eventsLoader } from './pages/Events';
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import RouteLayout from "./pages/Root";
+import HomePage from "./pages/Home";
+import EventsPage, { loader as eventsLoader } from "./pages/Events";
 import EventDetailPage, {
   loader as eventDetailLoader,
-} from './pages/EventDetail';
-import NewEventPage from './pages/NewEvent';
-import EventRootLayout from './pages/EventsRoot';
-import ErrorPage from './pages/Error';
+} from "./pages/EventDetail";
+import NewEventPage, { action as newEventAction } from "./pages/NewEvent";
+import EventRootLayout from "./pages/EventsRoot";
+import ErrorPage from "./pages/Error";
+import EditEventPage from "./pages/EditEvent";
 
 const route = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <RouteLayout />,
     errorElement: <ErrorPage />,
     children: [
@@ -41,7 +42,7 @@ const route = createBrowserRouter([
         element: <HomePage />,
       },
       {
-        path: 'events',
+        path: "events",
         element: <EventRootLayout />,
         children: [
           {
@@ -50,17 +51,24 @@ const route = createBrowserRouter([
             loader: eventsLoader,
           },
           {
-            path: ':eventId',
-            element: <EventDetailPage />,
+            path: ":eventId",
+            id: "event-detail",
             loader: eventDetailLoader,
+            children: [
+              {
+                index: true,
+                element: <EventDetailPage />,
+              },
+              {
+                path: "edit",
+                element: <EditEventPage />,
+              },
+            ],
           },
           {
-            path: 'new',
+            path: "new",
             element: <NewEventPage />,
-          },
-          {
-            path: ':eventId/edit',
-            element: <EventDetailPage />,
+            action: newEventAction,
           },
         ],
       },
