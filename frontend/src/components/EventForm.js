@@ -35,7 +35,7 @@ function EventForm({ method, event }) {
           id="title"
           type="text"
           name="title"
-          required
+          
           defaultValue={event ? event.title : ""}
         />
       </p>
@@ -45,7 +45,6 @@ function EventForm({ method, event }) {
           id="image"
           type="url"
           name="image"
-          required
           defaultValue={event ? event.image : ""}
         />
       </p>
@@ -55,7 +54,7 @@ function EventForm({ method, event }) {
           id="date"
           type="date"
           name="date"
-          required
+          
           defaultValue={event ? event.date : ""}
         />
       </p>
@@ -65,7 +64,7 @@ function EventForm({ method, event }) {
           id="description"
           name="description"
           rows="5"
-          required
+          
           defaultValue={event ? event.description : ""}
         />
       </p>
@@ -109,6 +108,10 @@ export async function action({ request, params }) {
     },
     body: JSON.stringify(eventData),
   });
+
+  if(response.status === 422){
+    return response;
+  }
 
   if (!response.ok) {
     throw json(
