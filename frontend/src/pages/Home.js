@@ -1,5 +1,9 @@
+import PageContent from "../components/PageContent";
+
 function HomePage() {
-  return <h1>Home Page</h1>;
+  return <PageContent title="Welcome!">
+    <p>Browse our amazing events!</p>
+  </PageContent>;
 }
 
 export default HomePage;
